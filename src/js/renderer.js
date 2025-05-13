@@ -156,7 +156,7 @@ class Renderer {
             
             // Resource sprites
             this.sprites['food'] = { loaded: false, color: this.getPlaceholderColor('food') };
-            this.sprites['water'] = { loaded: false, color: this.getPlaceholderColor('water') };
+            this.sprites['water'] = { loaded: false, color: this.getPlaceholderColor('water_resource') };
             this.sprites['wood'] = { loaded: false, color: this.getPlaceholderColor('wood') };
             this.sprites['stone'] = { loaded: false, color: this.getPlaceholderColor('stone') };
             this.sprites['plant_fiber'] = { loaded: false, color: this.getPlaceholderColor('plant_fiber') };
@@ -275,7 +275,7 @@ class Renderer {
             
             // Resources
             'food': '#E8C967',
-            'water': '#5FB2F0',
+            'water_resource': '#5FB2F0',
             'wood': '#956A44',
             'stone': '#9E9E9E',
             'plant_fiber': '#8AAD57',
