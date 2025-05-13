@@ -116,3 +116,56 @@ global.EventLogger = {
   maxEvents: 100,
   debugMode: true,
 };
+
+// Define global objects needed for tests
+global.initialPopulation = {
+  total: 10,
+  growth: 0,
+  deathRate: 0,
+  foodConsumptionPerDay: 2,
+  waterConsumptionPerDay: 3,
+  groups: {
+    gatherers: 5,
+    hunters: 3,
+    builders: 2,
+    researchers: 0
+  }
+};
+
+global.initialResources = {
+  food: 100,
+  water: 100,
+  wood: 50,
+  stone: 20,
+  plantFiber: 10,
+  metalOre: 0,
+  clay: 0,
+  animalHide: 0
+};
+
+global.technologyTree = {
+  stoneTools: {
+    name: 'Stone Tools',
+    phase: 'primitive',
+    requirements: {},
+    resourceCost: { stone: 10 },
+    discoveryChance: 1.0,
+    discovered: false,
+    inProgress: false,
+    progressPercent: 0,
+    timeToDiscover: 10,
+    effects: { gatheringEfficiency: 1.2 }
+  },
+  woodenTools: {
+    name: 'Wooden Tools',
+    phase: 'primitive',
+    requirements: {},
+    resourceCost: { wood: 10 },
+    discoveryChance: 1.0,
+    discovered: false,
+    inProgress: false,
+    progressPercent: 0,
+    timeToDiscover: 10,
+    effects: { woodGatheringRate: 1.2 }
+  }
+};

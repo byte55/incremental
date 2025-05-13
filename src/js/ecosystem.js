@@ -191,3 +191,6 @@ class Ecosystem {
         return gathered;
     }
 }
+
+// Make Ecosystem available globally
+window.Ecosystem = Ecosystem;

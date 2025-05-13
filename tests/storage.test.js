@@ -3,10 +3,16 @@
  */
 
 describe('GameStorage', () => {
+  let GameStorage;
   let mockGameData;
   let mockSessionStorage;
 
   beforeEach(() => {
+    // Reset modules and load storage
+    jest.resetModules();
+    require('../src/js/storage');
+    GameStorage = window.GameStorage;
+
     // Mock game data
     mockGameData = {
       environment: { season: 'spring', temperature: 15 },
@@ -27,13 +33,11 @@ describe('GameStorage', () => {
       setItem: jest.fn(),
       removeItem: jest.fn()
     };
+    // Override the existing sessionStorage mock with our test-specific one
     Object.defineProperty(window, 'sessionStorage', {
-      value: mockSessionStorage
+      value: mockSessionStorage,
+      writable: true
     });
-
-    // Reset GameStorage module for each test
-    jest.resetModules();
-    require('../src/js/storage');
   });
 
   test('should save game data to session storage', () => {

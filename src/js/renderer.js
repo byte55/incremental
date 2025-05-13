@@ -631,29 +631,82 @@ class Renderer {
                 this.assignNewTarget(settler);
             }
             
-            // Move toward target
+            // Move toward target using path if available
             if (settler.targetX !== null && settler.targetY !== null) {
-                const dx = settler.targetX - settler.x;
-                const dy = settler.targetY - settler.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                
-                if (distance > 0.1) {
-                    // Move toward target
-                    settler.x += (dx / distance) * settler.speed * gameSpeed;
-                    settler.y += (dy / distance) * settler.speed * gameSpeed;
+                // If settler has a path, follow it
+                if (settler.path && settler.path.length > 0) {
+                    this.moveSettlerAlongPath(settler, gameSpeed);
                 } else {
-                    // Reached target
-                    settler.x = settler.targetX;
-                    settler.y = settler.targetY;
-                    
-                    // Perform task at target
-                    this.performSettlerTask(settler);
-                    
-                    // Clear target
-                    settler.targetX = null;
-                    settler.targetY = null;
+                    // Fallback to direct movement if no path available
+                    this.moveSettlerDirectly(settler, gameSpeed);
                 }
             }
+        }
+    }
+    
+    /**
+     * Move settler along calculated path
+     * @param {Object} settler - Settler object to move
+     * @param {number} gameSpeed - Current game speed
+     */
+    moveSettlerAlongPath(settler, gameSpeed) {
+        // Get next point in path
+        const nextPoint = settler.path[0];
+        
+        // Move toward next point
+        const dx = nextPoint.x + 0.5 - settler.x; // Center of tile
+        const dy = nextPoint.y + 0.5 - settler.y; // Center of tile
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance > 0.1) {
+            // Move toward next point
+            settler.x += (dx / distance) * settler.speed * gameSpeed;
+            settler.y += (dy / distance) * settler.speed * gameSpeed;
+        } else {
+            // Reached next point, remove it from path
+            settler.path.shift();
+            
+            // If path is empty, we've reached the target
+            if (settler.path.length === 0) {
+                // Final position adjustment
+                settler.x = settler.targetX;
+                settler.y = settler.targetY;
+                
+                // Perform task at target
+                this.performSettlerTask(settler);
+                
+                // Clear target
+                settler.targetX = null;
+                settler.targetY = null;
+            }
+        }
+    }
+    
+    /**
+     * Move settler directly to target (fallback when no path available)
+     * @param {Object} settler - Settler object to move
+     * @param {number} gameSpeed - Current game speed
+     */
+    moveSettlerDirectly(settler, gameSpeed) {
+        const dx = settler.targetX - settler.x;
+        const dy = settler.targetY - settler.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance > 0.1) {
+            // Move toward target
+            settler.x += (dx / distance) * settler.speed * gameSpeed;
+            settler.y += (dy / distance) * settler.speed * gameSpeed;
+        } else {
+            // Reached target
+            settler.x = settler.targetX;
+            settler.y = settler.targetY;
+            
+            // Perform task at target
+            this.performSettlerTask(settler);
+            
+            // Clear target
+            settler.targetX = null;
+            settler.targetY = null;
         }
     }
     
@@ -691,6 +744,37 @@ class Renderer {
                 // Random exploration
                 this.assignExplorationTarget(settler);
         }
+        
+        // If a target was assigned, calculate path to it
+        if (settler.targetX !== null && settler.targetY !== null) {
+            // Calculate path to target using pathfinding
+            settler.path = this.findPathForSettler(settler, settler.targetX, settler.targetY);
+            
+            // If no path found, try a different target
+            if (!settler.path || settler.path.length === 0) {
+                settler.targetX = null;
+                settler.targetY = null;
+                this.assignExplorationTarget(settler);
+            }
+        }
+    }
+    
+    /**
+     * Find path for a settler to a target position
+     * @param {Object} settler - The settler object
+     * @param {number} targetX - Target X coordinate
+     * @param {number} targetY - Target Y coordinate
+     * @returns {Array} - Path as array of points
+     */
+    findPathForSettler(settler, targetX, targetY) {
+        // Get current position
+        const startX = Math.floor(settler.x);
+        const startY = Math.floor(settler.y);
+        const endX = Math.floor(targetX);
+        const endY = Math.floor(targetY);
+        
+        // Use the pathfinding system to find a path
+        return Pathfinding.findPath(this.terrain, startX, startY, endX, endY, true);
     }
     
     assignResourceTarget(settler, resourceTypes) {
@@ -836,8 +920,46 @@ class Renderer {
         // Render buildings
         this.renderBuildings();
         
+        // Render paths (for debugging)
+        this.renderPaths();
+        
         // Render settlers
         this.renderSettlers();
+    }
+    
+    /**
+     * Render settler paths for debugging
+     */
+    renderPaths() {
+        for (const settler of this.entities.settlers) {
+            if (settler.path && settler.path.length > 0) {
+                // Draw path
+                this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+                this.ctx.lineWidth = 1;
+                this.ctx.beginPath();
+                
+                // Start from settler's current position
+                const startX = (settler.x - this.camera.x) * this.tileSize + this.tileSize / 2;
+                const startY = (settler.y - this.camera.y) * this.tileSize + this.tileSize / 2;
+                this.ctx.moveTo(startX, startY);
+                
+                // Draw line through each path point
+                for (const point of settler.path) {
+                    const screenX = (point.x - this.camera.x) * this.tileSize + this.tileSize / 2;
+                    const screenY = (point.y - this.camera.y) * this.tileSize + this.tileSize / 2;
+                    this.ctx.lineTo(screenX, screenY);
+                }
+                
+                // Connect to target
+                if (settler.targetX !== null && settler.targetY !== null) {
+                    const targetX = (settler.targetX - this.camera.x) * this.tileSize + this.tileSize / 2;
+                    const targetY = (settler.targetY - this.camera.y) * this.tileSize + this.tileSize / 2;
+                    this.ctx.lineTo(targetX, targetY);
+                }
+                
+                this.ctx.stroke();
+            }
+        }
     }
     
     renderTerrain() {
@@ -1086,3 +1208,6 @@ class Renderer {
         }
     }
 }
+
+// Make Renderer available globally
+window.Renderer = Renderer;

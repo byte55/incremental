@@ -4,6 +4,7 @@
 
 describe('Renderer', () => {
   let renderer;
+  let Renderer;
   let mockGame;
   let originalDocument;
 
@@ -53,11 +54,13 @@ describe('Renderer', () => {
         daysPassed: 0
       }
     };
-
-    // Load the Renderer class
-    require('../src/js/renderer');
     
-    // Create renderer instance
+    // Reset modules and create renderer instance
+    jest.resetModules();
+    require('../src/js/utils');
+    require('../src/js/pathfinding');
+    require('../src/js/renderer');
+    Renderer = window.Renderer;
     renderer = new Renderer(mockGame);
   });
 

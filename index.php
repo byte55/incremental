@@ -83,6 +83,7 @@ header('Pragma: no-cache');
 
     <script src="src/js/data.js"></script>
     <script src="src/js/utils.js"></script>
+    <script src="src/js/pathfinding.js"></script>
     <script src="src/js/ecosystem.js"></script>
     <script src="src/js/settlement.js"></script>
     <script src="src/js/technology.js"></script>

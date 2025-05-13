@@ -147,3 +147,6 @@ class GameStorage {
         EventLogger.addEvent('Game loaded from saved state.');
     }
 }
+
+// Make GameStorage available globally
+window.GameStorage = GameStorage;

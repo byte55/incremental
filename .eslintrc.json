@@ -40,6 +40,8 @@
     "Renderer": "readable",
     "Controls": "readable",
     "GameStorage": "readable",
-    "Game": "readable"
+    "Game": "readable",
+    "GameUtils": "readable",
+    "Pathfinding": "readable"
   }
 }

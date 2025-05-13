@@ -555,3 +555,6 @@ class Settlement {
         }
     }
 }
+
+// Make Settlement available globally
+window.Settlement = Settlement;
