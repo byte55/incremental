@@ -1,0 +1,45 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "jest": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:jest/recommended",
+    "prettier"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module"
+  },
+  "plugins": ["jest"],
+  "rules": {
+    "no-unused-vars": "warn",
+    "no-console": "off",
+    "func-names": "off",
+    "no-process-exit": "off",
+    "object-shorthand": "off",
+    "class-methods-use-this": "off"
+  },
+  "globals": {
+    "RESOURCE_TYPES": "readonly",
+    "TECH_PHASES": "readonly",
+    "ECOSYSTEM_TYPES": "readonly",
+    "WEATHER_CONDITIONS": "readonly",
+    "SEASONS": "readonly",
+    "initialResources": "readonly",
+    "technologyTree": "readable",
+    "initialPopulation": "readonly",
+    "initialEnvironment": "readonly",
+    "Ecosystem": "readable",
+    "Settlement": "readable",
+    "TechnologyManager": "readable",
+    "UIManager": "readable",
+    "EventLogger": "readable",
+    "Renderer": "readable",
+    "Controls": "readable",
+    "GameStorage": "readable",
+    "Game": "readable"
+  }
+}
