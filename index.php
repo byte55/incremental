@@ -1,0 +1,94 @@
+<?php
+// This is a simple PHP file to serve the game when running on a PHP server
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evolution Simulation</title>
+    <link rel="stylesheet" href="src/css/styles.css">
+</head>
+<body>
+    <div id="game-container">
+        <header>
+            <h1>Evolution Simulation</h1>
+            <div id="time-controls">
+                <button id="btn-pause">⏸️</button>
+                <button id="btn-play">▶️</button>
+                <button id="btn-fast">⏩</button>
+            </div>
+        </header>
+
+        <div id="game-area">
+            <canvas id="game-canvas"></canvas>
+        </div>
+
+        <div id="sidebar">
+            <div class="panel">
+                <h2>Environment</h2>
+                <div id="environment-stats">
+                    <div class="stat">
+                        <span>Season:</span>
+                        <span id="season-value">Spring</span>
+                    </div>
+                    <div class="stat">
+                        <span>Temperature:</span>
+                        <span id="temperature-value">15°C</span>
+                    </div>
+                    <div class="stat">
+                        <span>Weather:</span>
+                        <span id="weather-value">Clear</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Resources</h2>
+                <div id="resource-stats">
+                    <!-- Resource stats will be populated dynamically -->
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Population</h2>
+                <div id="population-stats">
+                    <div class="stat">
+                        <span>Total:</span>
+                        <span id="population-total">0</span>
+                    </div>
+                    <div class="stat">
+                        <span>Growth:</span>
+                        <span id="population-growth">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Technology</h2>
+                <div id="technology-tree">
+                    <!-- Technology tree will be populated dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <div id="log-container">
+            <h3>Event Log</h3>
+            <div id="event-log"></div>
+        </div>
+    </div>
+
+    <script src="src/js/data.js"></script>
+    <script src="src/js/ecosystem.js"></script>
+    <script src="src/js/settlement.js"></script>
+    <script src="src/js/technology.js"></script>
+    <script src="src/js/renderer.js"></script>
+    <script src="src/js/controls.js"></script>
+    <script src="src/js/ui.js"></script>
+    <script src="src/js/storage.js"></script>
+    <script src="src/js/game.js"></script>
+</body>
+</html>
